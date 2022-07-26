@@ -1,17 +1,22 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MemoryMemberRepositorytest {
 
-    MemberRepository repository = new MemoryMemberRepository();
+    MemoryMemberRepository repository = new MemoryMemberRepository();
+
+    @AfterEach//메서드가 끝날때마다 어떠한 동작을 하게 만드는 것
+    public void afterEach(){
+        repository.clearStore();
+    }
 
     @Test
     public void save(){
@@ -21,7 +26,7 @@ public class MemoryMemberRepositorytest {
         repository.save(member);
 
         Member result = repository.findById(member.getId()).get();
-        Assertions.assertEquals(member, result);
+        Assertions.assertThat(member).isEqualTo(result);
     }
 
     @Test
